@@ -100,7 +100,7 @@ int main()
 }
 ```
 
-![image-20230522201520585](手写muduo库.assets/image-20230522201520585.png)
+![image-20230522201520585](others/image-20230522201520585.png)
 
 
 
@@ -134,7 +134,7 @@ su root
 
 centos boost fatal error: pyconfig.h: No such file or directory #include pyconfig.h。
 
-![image-20230522161548570](手写muduo库.assets/image-20230522161548570.png)
+![image-20230522161548570](others/image-20230522161548570.png)
 
 ##### 原因：
 
@@ -280,7 +280,7 @@ int main()
 }
 ```
 
-![image-20230523000840579](手写muduo库.assets/image-20230523000840579.png)
+![image-20230523000840579](others/image-20230523000840579.png)
 
 ## 基于muduo库的客户端程序：
 
@@ -344,6 +344,4 @@ make
 ./testserver  # 即可使用客户端连接到本机IP（127.0.0.1）的8000端口，来请求该回显服务器
 ```
 
-![image-20230718203859114](手写muduo库.assets/image-20230718203859114.png)
-
-# muduo库的核心模块：
+![image-20230718203859114](others/image-20230718203859114.png)
