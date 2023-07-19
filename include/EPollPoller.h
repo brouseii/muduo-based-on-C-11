@@ -9,7 +9,7 @@
 class Channel;
 
 /**
- * epoll的使用  
+ * epoll的使用：
  * epoll_create
  * epoll_ctl   add/mod/del
  * epoll_wait
