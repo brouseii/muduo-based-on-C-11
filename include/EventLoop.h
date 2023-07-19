@@ -24,14 +24,14 @@ public:
     ~EventLoop();   // Force out-line dtor, for unique_ptr members.
 
     // 开启事件循环：
-	// must be called in the same thread as creation of the object
+    // must be called in the same thread as creation of the object
     void loop();
     // 退出事件循环：
-	// This is not 100% thread safe, if you call through a raw pointer.
+    // This is not 100% thread safe, if you call through a raw pointer.
     // better to call through shared_ptr<EventLoop> for 100% safety.
     void quit();
 
-	// Time when poll returns, usually means data arrival.
+    // Time when poll returns, usually means data arrival.
     Timestamp pollReturnTime() const { return pollReturnTime_; }
     
     // 在当前loop中执行cb
@@ -71,7 +71,7 @@ private:
     Timestamp pollReturnTime_; // poller返回发生事件的channels的时间点
     std::unique_ptr<Poller> poller_;
 
-	/*
+    /*
         主要的作用：当mainloop获取一个新用户的channel
         ，并通过轮询算法获取一个subloop
         ，通过该成员唤醒subloop处理channel
