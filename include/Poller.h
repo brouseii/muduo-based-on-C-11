@@ -20,12 +20,12 @@ public:
     virtual ~Poller() = default;
 
     // 给所有IO复用保留统一的接口
-	/* Must be called in the loop thread. */
+    /* Must be called in the loop thread. */
     // polls the I/O events
     virtual Timestamp poll(int timeoutMs, ChannelList *activeChannels) = 0;
-	// Changes the interested I/O events
+    // Changes the interested I/O events
     virtual void updateChannel(Channel *channel) = 0;
-	// Remove the channel, when it destructs.
+    // Remove the channel, when it destructs.
     virtual void removeChannel(Channel *channel) = 0;
     
     // 判断参数channel是否在当前Poller当中
