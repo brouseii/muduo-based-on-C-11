@@ -54,7 +54,7 @@ Timestamp EPollPoller::poll(int timeoutMs, ChannelList *activeChannels)
     }
     else
     {
-		// error happen, log uncommon ones
+	// error happen, log uncommon ones
         if (saveErrno != EINTR)
         {
             errno = saveErrno;
