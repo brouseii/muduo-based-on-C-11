@@ -13,7 +13,7 @@ namespace CurrentThread
     {
         if (__builtin_expect(t_cachedTid == 0, 0))
         {
-			// 通过linux系统调用SYS_gettid()，获取当前线程的tid值
+	    // 通过linux系统调用SYS_gettid()，获取当前线程的tid值
             cacheTid();
         }
         return t_cachedTid;
