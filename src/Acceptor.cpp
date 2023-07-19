@@ -27,7 +27,7 @@ Acceptor::Acceptor(EventLoop *loop, const InetAddress &listenAddr, bool reusepor
     acceptSocket_.setReusePort(reuseport);
     acceptSocket_.bindAddress(listenAddr); // bind
 	
-	// 只注册了读回调函数：用来接受客户端的连接（listenfd只关心读事件）
+    // 只注册了读回调函数：用来接受客户端的连接（listenfd只关心读事件）
     // TcpServer::start() Acceptor.listen  有新用户的连接，要执行一个回调（connfd => channel => subloop）
     // baseLoop => acceptChannel_(listenfd) => 
     acceptChannel_.setReadCallback(std::bind(&Acceptor::handleRead, this));
@@ -44,7 +44,7 @@ void Acceptor::listen()
     listenning_ = true;
     acceptSocket_.listen(); // listen
 	
-	// 将acceptChannel_注册到Poller中
+    // 将acceptChannel_注册到Poller中
     acceptChannel_.enableReading(); // acceptChannel_ => Poller
 }
 
@@ -57,7 +57,7 @@ void Acceptor::handleRead()
     {
         if (newConnectionCallback_)
         {
-			// 该函数中，需要轮询找到subloop，并唤醒、分发当前新客户端的channel
+	    // 该函数中，需要轮询找到subloop，并唤醒、分发当前新客户端的channel
             newConnectionCallback_(connfd, peerAddr);  
         }
         else
