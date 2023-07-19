@@ -23,7 +23,7 @@ public:
     EventLoop();
     ~EventLoop();   // Force out-line dtor, for unique_ptr members.
 
-    // 开启事件循环：
+    // 开启事件循环：持续循环的获取监听结果并根据结果调用处理函数
     // must be called in the same thread as creation of the object
     void loop();
     // 退出事件循环：
