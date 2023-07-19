@@ -14,7 +14,7 @@ InetAddress::InetAddress(uint16_t port, std::string ip)
 std::string InetAddress::toIp() const
 { 
     char buf[64] = {0};
-	// 网络字节序转本地字节序：大端->小端
+    // 网络字节序转本地字节序：大端->小端
     ::inet_ntop(AF_INET, &sockaddr_.sin_addr, buf, sizeof(buf));
     return buf;  // 字符数组char[]隐式的转换为string
 }
