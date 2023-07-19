@@ -59,7 +59,7 @@ EventLoop::~EventLoop()
     t_loopInThisThread = nullptr;
 }
 
-// 开启事件循环
+// 开启事件循环：持续循环的获取监听结果并根据结果调用处理函数
 void EventLoop::loop()
 {
     looping_ = true;
