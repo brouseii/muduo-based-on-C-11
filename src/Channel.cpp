@@ -28,7 +28,7 @@ void Channel::tie(const std::shared_ptr<void> &obj)
  * 当改变channel所表示fd的events事件后，update负责在poller里面更改fd相应的事件epoll_ctl
  *
  * EventLoop ==> ChannelLists + Poller，即channel需要通过EventLoop才能访问poller
- * ，即 Channel:update/remove --> EventLoop:updateChannel/removeChannel --> Poller
+ * ，即 Channel::update/remove --> EventLoop::updateChannel/removeChannel --> Poller
 */ 
 void Channel::update()
 {
