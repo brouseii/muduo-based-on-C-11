@@ -37,7 +37,7 @@ public:
     // 在当前loop中执行cb
     void runInLoop(Functor cb);
 	
-    // 将loop放入队列中，唤醒loop所在的线程，执行cb
+    // 将cb放入队列中，唤醒loop所在的线程，执行cb
     void queueInLoop(Functor cb);
 
     // 用来唤醒loop所在的线程的
