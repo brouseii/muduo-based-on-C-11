@@ -8,7 +8,7 @@
  * 接受客户端发送的存放在TCP接收缓冲区的数据，并存入buffer_中。
  * 从fd上读取数据  Poller工作在LT模式
  * Buffer缓冲区是有大小的！ 但是从fd上读数据的时候，却不知道tcp数据最终的大小。
- */ 
+*/ 
 ssize_t Buffer::readFd(int fd, int* saveErrno)
 {
     char extrabuf[65536] = {0}; // 栈上的内存空间  64K  初始化为0
@@ -41,17 +41,17 @@ ssize_t Buffer::readFd(int fd, int* saveErrno)
     {
         *saveErrno = errno;
     }
-	// 此时，表示从fd的接收缓冲区，收到的n字节数据，已正常放入buffer_中，故只需调整writeIndex_即可。
+    // 此时，表示从fd的接收缓冲区，收到的n字节数据，已正常放入buffer_中，故只需调整writeIndex_即可。
     else if (n <= writable) // Buffer的可写缓冲区已经够存储读出来的数据了
     {
         writerIndex_ += n;
     }
-	// 此时，表示从fd的接收缓冲区，收到的n字节数据，除了放入buffer_中的数据，还有n - writalbe字节的数据，存放在了extrabuf中。
-	// 所以，需要将extrabuf中的数据转移到扩容后的buffer_中。
+    // 此时，表示从fd的接收缓冲区，收到的n字节数据，除了放入buffer_中的数据，还有n - writalbe字节的数据，存放在了extrabuf中。
+    // 所以，需要将extrabuf中的数据转移到扩容后的buffer_中。
     else                    // extrabuf里面也写入了数据 
     {
         writerIndex_ = buffer_.size();
-		// 从 writerIndex_开始写 n - writable 大小的数据，到buffer_中
+	// 从 writerIndex_开始写 n - writable 大小的数据，到buffer_中
         append(extrabuf, n - writable);  
     }
 
