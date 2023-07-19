@@ -33,7 +33,7 @@ Timestamp EPollPoller::poll(int timeoutMs, ChannelList *activeChannels)
     // 实际上应该用LOG_DEBUG输出日志更为合理
     LOG_INFO("[EpollPoller::%s] ==> fd total size = %d.\n", __FUNCTION__, channels_.size());
 	
-	/* int epoll_wait(int __epfd, epoll_event *__events, int __maxevents, int __timeout) */ 
+    /* int epoll_wait(int __epfd, epoll_event *__events, int __maxevents, int __timeout) */ 
     int numEvents = ::epoll_wait(epollfd_, &*events_.begin(), static_cast<int>(events_.size()), timeoutMs);
     int saveErrno = errno;
     Timestamp now(Timestamp::now());
@@ -44,7 +44,7 @@ Timestamp EPollPoller::poll(int timeoutMs, ChannelList *activeChannels)
         fillActiveChannels(numEvents, activeChannels);
         if (numEvents == events_.size())
         {
-			// 此时，需要对vector<epoll_event> events_容器进行“2倍扩容”操作
+	    // 此时，需要对vector<epoll_event> events_容器进行“2倍扩容”操作
             events_.resize(events_.size() * 2);
         }
     }
@@ -81,7 +81,7 @@ void EPollPoller::updateChannel(Channel *channel)
 
     if (index == kNew || index == kDeleted)
     {
-		// a new one, add with EPOLL_CTL_ADD
+	// a new one, add with EPOLL_CTL_ADD
         if (index == kNew)
         {
             int fd = channel->fd();
@@ -93,7 +93,7 @@ void EPollPoller::updateChannel(Channel *channel)
     }
     else  // 此时，channel已经在poller上注册过了
     {
-		// update existing one with EPOLL_CTL_MOD/DEL
+	// update existing one with EPOLL_CTL_MOD/DEL
         int fd = channel->fd();
         if (channel->isNoneEvent())
         {
@@ -138,7 +138,7 @@ void EPollPoller::fillActiveChannels(int numEvents, ChannelList *activeChannels)
 // 通过调用epoll_ctl()，完成对channel通道所监听事件在epollfd_上的operation操作
 void EPollPoller::update(int operation, Channel *channel)
 {
-	/*
+    /*
         #include <sys/epoll.h>
         int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event); 
 
