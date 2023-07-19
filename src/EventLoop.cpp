@@ -71,7 +71,7 @@ void EventLoop::loop()
     {
         activeChannels_.clear();  // 清空vector<Channel*>
 		
-		/* Poller监听哪些channel发生事件了，然后上报给EventLoop，并通知Channel处理相应的事件 */
+	/* Poller监听哪些channel发生事件了，然后上报给EventLoop，并通知Channel处理相应的事件 */
         // 监听两类fd：一种是client的fd，一种wakeupfd
         pollReturnTime_ = poller_->poll(kPollTimeMs, &activeChannels_);
 		
@@ -85,8 +85,8 @@ void EventLoop::loop()
         /**
          * IO线程 mainLoop accept fd《= channel subloop
          * mainLoop 事先注册一个回调cb（需要subloop来执行）    
-		 * wakeup subloop后，执行下面的方法（即执行之前mainloop注册在pendingFunctors中的cb操作）
-         */ 
+         * wakeup subloop后，执行下面的方法（即执行之前mainloop注册在pendingFunctors中的cb操作）
+        */ 
         doPendingFunctors();
     }
 
@@ -107,8 +107,8 @@ void EventLoop::quit()
     // 在一个subloop(woker)中，调用了mainLoop(IO)的quit 
     if (!isInLoopThread())  
     {
-		// 如果在其他线程中，调用了quit()，需要在先唤醒之后
-		//，且该loop在执行完一次while循环后自动quit
+	// 如果在其他线程中，调用了quit()，需要在先唤醒之后
+	//，且该loop在执行完一次while循环后自动quit
         wakeup();
     }
 }
@@ -182,7 +182,7 @@ bool EventLoop::hasChannel(Channel *channel)
 // 执行回调操作：
 void EventLoop::doPendingFunctors() 
 {
-	// 定义局部的functors，并与pendingFunctors_进行交换
+    // 定义局部的functors，并与pendingFunctors_进行交换
     //，之后pendingFunctors_会变为空，mainloop可继续给其中添加cb
     std::vector<Functor> functors;
     callingPendingFunctors_ = true;
