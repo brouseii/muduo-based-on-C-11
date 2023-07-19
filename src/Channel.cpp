@@ -29,7 +29,7 @@ void Channel::tie(const std::shared_ptr<void> &obj)
  *
  * EventLoop ==> ChannelLists + Poller，即channel需要通过EventLoop才能访问poller
  * ，即 Channel:update/remove --> EventLoop:updateChannel/removeChannel --> Poller
- */ 
+*/ 
 void Channel::update()
 {
     // 通过channel所属的EventLoop，调用poller的相应方法，注册fd的events事件
@@ -47,7 +47,7 @@ void Channel::handleEvent(Timestamp receiveTime)
 {
     if (tied_)
     {
-		// 将weak_ptr提升为shared_ptr，并通过判断返回值来衡量tie_是否还存在
+	// 将weak_ptr提升为shared_ptr，并通过判断返回值来衡量tie_是否还存在
         std::shared_ptr<void> guard = tie_.lock();
         if (guard)
         {
@@ -65,7 +65,7 @@ void Channel::handleEventWithGuard(Timestamp receiveTime)
 {
     LOG_INFO("channel handleEvent revents:%d\n", revents_);
 
-	// 在使用epoll机制进行I/O多路复用时，当文件描述符上出现EPOLLHUP事件时，通常意味着连接已经被对端关闭，或者一些错误导致连接异常断开。
+    // 在使用epoll机制进行I/O多路复用时，当文件描述符上出现EPOLLHUP事件时，通常意味着连接已经被对端关闭，或者一些错误导致连接异常断开。
     if ((revents_ & EPOLLHUP) && !(revents_ & EPOLLIN))
     {
         if (closeCallback_)
@@ -82,11 +82,11 @@ void Channel::handleEventWithGuard(Timestamp receiveTime)
         }
     }
 
-	/*  
+    /*  
         EPOLLPRI是Linux系统中epoll的一种事件类型，它表示有一个高优先级的带外(out-of-band)数据可供读取。
         带外数据是一种特殊类型的数据，它不是按照普通数据流来发送和接收的，而是可以在普通数据的外部被发送和接收。
         这种数据通常用于向应用程序传递紧急信息或控制命令，因此具有更高的优先级。 
-	*/
+    */
     if (revents_ & (EPOLLIN | EPOLLPRI))
     {
         if (readCallback_)
