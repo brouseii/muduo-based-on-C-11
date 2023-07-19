@@ -35,6 +35,6 @@ private:
     ThreadFunc func_;
     std::string name_;   // 每个线程均有一个名字
 	
-	// 对所有线程数进行计数
+    // 对所有线程数进行计数
     static std::atomic_int numCreated_;
 };
