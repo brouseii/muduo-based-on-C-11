@@ -29,20 +29,20 @@ public:
     void listen();                                   // 监听sockfd_套接字
 	
     int accept(InetAddress *peeraddr);               // 接受客户端的连接
-	// On success, 
+    // On success, 
     //          1、returns a non-negative integer that is a descriptor for the accepted socket, which has been set to non-blocking and close-on-exec.
     //          2、*peeraddr is assigned.
     // On error, -1 is returned, and *peeraddr is untouched.
 
     void shutdownWrite();    // 关闭服务器的写端
 
-	/* 这四个函数，通过调用::setsockopt()方法，来设置sockfd_的属性 */ 
+    /* 这四个函数，通过调用::setsockopt()方法，来设置sockfd_的属性 */ 
     void setTcpNoDelay(bool on);
     void setReuseAddr(bool on);
     void setReusePort(bool on);
     void setKeepAlive(bool on);
 	
-	// 通过sockfd_获取其绑定的IP+Port的sockaddr_in地址结构
+    // 通过sockfd_获取其绑定的IP+Port的sockaddr_in地址结构
     static struct sockaddr_in sockfd_To_SockAddr(int sockfd) 
     {
         struct sockaddr_in sockAddr;
