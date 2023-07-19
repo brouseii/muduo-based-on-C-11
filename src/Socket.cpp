@@ -32,7 +32,7 @@ int Socket::accept(InetAddress *peeraddr)
      * Reactor模型：one loop per thread
      * poller + non-blocking IO
      * 注意：对返回的connfd没有设置非阻塞
-     */ 
+    */ 
     sockaddr_in addr;
     socklen_t len = sizeof(addr);
     memset(&addr, 0, sizeof(addr));
@@ -55,7 +55,7 @@ void Socket::shutdownWrite()
 void Socket::setTcpNoDelay(bool on)
 {
     int optval = on ? 1 : 0;
-	// TCP_NODELAY，属于IPPROTO_TCP层
+    // TCP_NODELAY，属于IPPROTO_TCP层
     ::setsockopt(sockfd_, IPPROTO_TCP, TCP_NODELAY, &optval, sizeof(optval));
 }
 
@@ -63,20 +63,20 @@ void Socket::setTcpNoDelay(bool on)
 void Socket::setReuseAddr(bool on)
 {
     int optval = on ? 1 : 0;
-	// SO_REUSEADDR：允许地址重用，属于SOL_SOCKET层
+    // SO_REUSEADDR：允许地址重用，属于SOL_SOCKET层
     ::setsockopt(sockfd_, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
 }
 
 void Socket::setReusePort(bool on)
 {
     int optval = on ? 1 : 0;
-	// SO_REUSEPORT：允许端口重用，属于SOL_SOCKET层
+    // SO_REUSEPORT：允许端口重用，属于SOL_SOCKET层
     ::setsockopt(sockfd_, SOL_SOCKET, SO_REUSEPORT, &optval, sizeof(optval));
 }
 
 void Socket::setKeepAlive(bool on)
 {
     int optval = on ? 1 : 0;
-	// SO_KEEPALIVE：启用TCP心跳机制，属于SOL_SOCKET层
+    // SO_KEEPALIVE：启用TCP心跳机制，属于SOL_SOCKET层
     ::setsockopt(sockfd_, SOL_SOCKET, SO_KEEPALIVE, &optval, sizeof(optval));
 }
