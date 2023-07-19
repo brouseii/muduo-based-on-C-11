@@ -29,6 +29,9 @@ private:
     EventLoop *loop_; // Acceptor用的就是用户定义的那个baseLoop，也称作mainLoop
     Socket acceptSocket_;
     Channel acceptChannel_;
+
+    // TcpServer构造函数中，将TcpServer::newConnection()函数注册给了这个成员变量
     NewConnectionCallback newConnectionCallback_;
+
     bool listenning_;
 };
