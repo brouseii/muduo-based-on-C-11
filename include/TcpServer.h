@@ -47,11 +47,11 @@ public:
     // 开启mainloop监听客户端的连接
     void start();
 private:
-	// Not thread safe, but in loop.
+    // Not thread safe, but in loop.
     void newConnection(int sockfd, const InetAddress &peerAddr);
-	// Thread safe.
+    // Thread safe.
     void removeConnection(const TcpConnectionPtr &conn);
-	// Not thread safe, but in loop.
+    // Not thread safe, but in loop.
     void removeConnectionInLoop(const TcpConnectionPtr &conn);
 
     using ConnectionMap = std::unordered_map<std::string, TcpConnectionPtr>;
