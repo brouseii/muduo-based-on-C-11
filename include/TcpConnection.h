@@ -65,7 +65,7 @@ public:
     /* This two functions should be called only once. */
     // Called me when tcpServer accepts a new connection
     void connectEstablished();
-    // Called me when TcpServerv has remove me from its map
+    // Called me when TcpServer has remove me from its map
     void connectDestroyed();
 private:
     enum StateE {kDisconnected, kConnecting, kConnected, kDisconnecting};
