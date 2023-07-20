@@ -60,7 +60,7 @@ void TcpServer::start()
         // 启动底层的loop线程池
         threadPool_->start(threadInitCallback_); 
 		
-		// 在当前loop中，执行Acceptor::listen()回调函数
+	// 在当前loop中，执行Acceptor::listen()回调函数
         loop_->runInLoop(std::bind(&Acceptor::listen, acceptor_.get()));
     }
 }
@@ -82,7 +82,7 @@ void TcpServer::newConnection(int sockfd, const InetAddress &peerAddr)
 
     // 通过sockfd获取其绑定的本机的ip地址和端口信息组成的InetAddress数据结构
     sockaddr_in local;
-	memset(&local, 0, sizeof(local));
+    memset(&local, 0, sizeof(local));
     socklen_t addrlen = sizeof(local);
     if (::getsockname(sockfd, (sockaddr*)&local, &addrlen) < 0)
     {
@@ -99,7 +99,7 @@ void TcpServer::newConnection(int sockfd, const InetAddress &peerAddr)
                             peerAddr));
     connections_[connName] = conn;  // 将该连接<connName, conn>存放在ConnectionMap中
 	
-	// 给该连接设置各种的回调函数：
+    // 给该连接设置各种的回调函数：
     // 下面的回调都是用户设置给TcpServer=>TcpConnection=>Channel=>Poller=>notify channel调用回调
     conn->setConnectionCallback(connectionCallback_);
     conn->setMessageCallback(messageCallback_);
