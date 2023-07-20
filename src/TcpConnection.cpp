@@ -80,7 +80,7 @@ void TcpConnection::send(const std::string& msg)
 // 由于应用层写的快，内核发送数据慢，故需要将待发送的数据先写入缓冲区，且设置了水位回调
 void TcpConnection::sendInLoop(const void* data, size_t len)
 {
-	loop_->assertInLoopThread();
+    loop_->assertInLoopThread();
     ssize_t nwrote = 0;
     size_t remaining = len;
     bool faultError = false;
@@ -92,7 +92,7 @@ void TcpConnection::sendInLoop(const void* data, size_t len)
         return;
     }
  
-	// if no thing in output queue, try writing directly
+    // if no thing in output queue, try writing directly
     // 此时，channel_第一次开始写数据，而且缓冲区没有待发送数据
     if (!channel_->isWriting() && outputBuffer_.readableBytes() == 0)
     {
@@ -133,10 +133,10 @@ void TcpConnection::sendInLoop(const void* data, size_t len)
         {
             loop_->queueInLoop(std::bind(highWaterMarkCallback_, shared_from_this(), oldLen+remaining));
         }
-		// 将message[nwrote, nwrote+remaining]的数据，写入到outputbuffer_中
+	// 将message[nwrote, nwrote+remaining]的数据，写入到outputbuffer_中
         outputBuffer_.append((char*)data + nwrote, remaining);
 		
-		// 向poller注册channel的写事件，否则poller不会给channel通知epollout
+	// 向poller注册channel的写事件，否则poller不会给channel通知epollout
         if (!channel_->isWriting())
         {
             channel_->enableWriting();  
@@ -196,12 +196,12 @@ void TcpConnection::handleRead(Timestamp receiveTime)
     }
     else if (n == 0)
     {
-		// 连接的客户端，已关闭
+	// 连接的客户端，已关闭
         handleClose();
     }
     else
     {
-		// 读取时sockfd的接收缓冲区时，发生了错误
+	// 读取时sockfd的接收缓冲区时，发生了错误
         errno = savedErrno;
         LOG_ERROR("TcpConnection::handleRead");
         handleError();
@@ -217,7 +217,7 @@ void TcpConnection::handleWrite()
         if (n > 0)
         {
             outputBuffer_.retrieve(n);
-			// 此时，buffer_中的数据已经全部通过channel_->fd()被发送给了客户端
+	    // 此时，buffer_中的数据已经全部通过channel_->fd()被发送给了客户端
             if (outputBuffer_.readableBytes() == 0)
             {
                 channel_->disableWriting();
@@ -252,7 +252,7 @@ void TcpConnection::handleClose()
 
     TcpConnectionPtr connPtr(shared_from_this());
     connectionCallback_(connPtr); // 执行连接关闭的回调
-	// must be the last line
+    // must be the last line
     closeCallback_(connPtr); // 执行关闭连接的回调，本质上执行的是TcpServer::removeConnection回调方法
 }
 
