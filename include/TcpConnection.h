@@ -50,7 +50,7 @@ public:
     // 关闭当前连接
     void shutdown();    // not thread safe, no simultaneous calling
  
-	// 设置回调函数：
+    // 设置回调函数：
     void setConnectionCallback(const ConnectionCallback& cb)
     { connectionCallback_ = cb; } 
     void setMessageCallback(const MessageCallback& cb)
@@ -77,7 +77,7 @@ private:
     void handleClose();
     void handleError();
 	
-	// 由于应用层写的快，内核发送数据慢，故需要将待发送的数据先写入缓冲区，且设置了水位回调
+    // 由于应用层写的快，内核发送数据慢，故需要将待发送的数据先写入缓冲区，且设置了水位回调
     void sendInLoop(const void* message, size_t len);
     void shutdownInLoop();
 
@@ -86,14 +86,14 @@ private:
     std::atomic_int state_;   // atomic variable
     bool reading_;
 	
-	// Acceptor ==> mainloop、TcpConnection ==> subloop
+    // Acceptor ==> mainloop、TcpConnection ==> subloop
     std::unique_ptr<Socket> socket_;
     std::unique_ptr<Channel> channel_;
 
     const InetAddress localAddr_;
     const InetAddress peerAddr_;
     
-	// 各种回调函数：
+    // 各种回调函数：
     ConnectionCallback connectionCallback_; // 有新连接时的回调
     MessageCallback messageCallback_;       // 有读写消息时的回调
     WriteCompleteCallback writeCompleteCallback_; // 消息发送完成以后的回调
