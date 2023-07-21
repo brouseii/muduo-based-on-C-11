@@ -185,26 +185,28 @@ void TcpConnection::connectDestroyed()  // 连接销毁
     channel_->remove(); // 把channel从poller中删除掉
 }
 
-void TcpConnection::handleRead(Timestamp receiveTime)
+void TcpConnection::handleRead(TimeStamp receiveTime)
 {
-    int savedErrno = 0;
-    ssize_t n = inputBuffer_.readFd(channel_->fd(), &savedErrno);
-    if (n > 0)
+    int savedErrno = 0;   // 保存读取拷贝的过程中发生的错误
+    // 已建立连接的用户，有可读事件发生了，并将Tcp接收缓冲区数据拷贝到用户定义的缓冲区inputBuffer_中
+    ssize_t n = inputBuffer_.readFd(channel_->fd(), &savedErrno);  
+    if(n > 0) 
     {
-        // 已建立连接的用户，有可读事件发生了，调用用户传入的回调操作messageCallback_
+        // 从fd读到了数据，并且放在了inputBuffer_上，接着调用messageCallback_
         messageCallback_(shared_from_this(), &inputBuffer_, receiveTime);
     }
-    else if (n == 0)
+    else if(n == 0)
     {
-	// 连接的客户端，已关闭
+        // 连接的客户端已关闭，这时会调用TcpConnection::handleClose()来处理连接关闭事件
         handleClose();
-    }
+    }    
     else
     {
-	// 读取时sockfd的接收缓冲区时，发生了错误
+        // 读取时sockfd的接收缓冲区时发生了错误，调用TcpConnection::handleError( )来处理savedErrno的错误事件
         errno = savedErrno;
         LOG_ERROR("TcpConnection::handleRead");
         handleError();
+        /* Moduo库只支持LT模式，所以读事件不会出现EAGAIN错误（EAGAIN错误是非阻塞IO调用时的一种常见错误），所以一旦出现错误肯定是比较不好的非正常错误。*/
     }
 }
 
