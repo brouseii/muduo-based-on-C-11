@@ -182,7 +182,7 @@ void TcpConnection::connectDestroyed()  // 连接销毁
         channel_->disableAll(); // 把channel的所有感兴趣的事件，从poller中del掉
         connectionCallback_(shared_from_this());  // 新连接建立，执行回调
     }
-    channel_->remove(); // 把channel从poller中删除掉
+    channel_->remove(); // 把channel从subEventLoop的poller中删除掉
 }
 
 void TcpConnection::handleRead(TimeStamp receiveTime)
