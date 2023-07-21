@@ -9,7 +9,8 @@
 #include <errno.h>
 #include <memory>
 
-// 防止在一个线程中，创建多个EventLoop对象
+/* 防止在一个线程中，创建多个EventLoop对象 */
+// __thread是一个关键字，其修饰的全局变量t_loopInThisThread在每一个线程内都会有一个独立的实体（一般的全局变量都是被同一个进程中的多个线程所共享）。
 __thread EventLoop *t_loopInThisThread = nullptr;
 
 // 定义默认的Poller IO复用接口的超时时间
@@ -32,16 +33,18 @@ EventLoop::EventLoop()
     , callingPendingFunctors_(false)
     , threadId_(CurrentThread::tid())
     , poller_(Poller::newDefaultPoller(this))
-    , wakeupFd_(createEventfd())
+    , wakeupFd_(createEventfd())   // 生成一个eventfd，每个EventLoop对象，都会有自己的eventfd
     , wakeupChannel_(new Channel(this, wakeupFd_))
 {
     LOG_DEBUG("EventLoop created %p in thread %d \n", this, threadId_);
     if (t_loopInThisThread)
     {
+	// 如果当前线程已经绑定了某个EventLoop对象（t_loopInThisThread != nullptr），那么该线程就无法创建新的EventLoop对象了。
         LOG_FATAL("Another EventLoop %p exists in this thread %d.\n", t_loopInThisThread, threadId_);
     }
     else
     {
+	// 如果当前线程没有绑定EventLoop对象（t_loopInThisThread == nullptr），那么就让该指针变量指向EventLoop对象的地址。
         t_loopInThisThread = this;
     }
 
