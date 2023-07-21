@@ -253,7 +253,7 @@ void TcpConnection::handleClose()
     channel_->disableAll();
 
     TcpConnectionPtr connPtr(shared_from_this());
-    connectionCallback_(connPtr); // 执行连接关闭的回调
+    connectionCallback_(connPtr); // // 调用用户自定义的连接事件处理函数（可有可无），执行连接关闭的回调
     // must be the last line
     closeCallback_(connPtr); // 执行关闭连接的回调，本质上执行的是TcpServer::removeConnection回调方法
 }
