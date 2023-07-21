@@ -53,7 +53,7 @@ void Acceptor::handleRead()
 {
     InetAddress peerAddr;
 
-    /* 执行了接受连接的命令，并将客户端的连接套接字connfd传递到new_connection_callbak回调函数中（连接的分发就藏该回调函数中）*/
+    /* 执行了接受连接的命令，并将客户端的连接套接字connfd传递到newConnectionCallback_回调函数中（连接的分发就藏该回调函数中）*/
     int connfd = acceptSocket_.accept(&peerAddr);  // accept
     if (connfd >= 0)
     {
