@@ -97,6 +97,26 @@ void EventLoop::loop()
     LOG_INFO("EventLoop %p stop looping. \n", this);
     looping_ = false;
 }
+// 执行回调操作：
+void EventLoop::doPendingFunctors() 
+{
+    // 定义局部的functors，并与pendingFunctors_进行交换
+    //，之后pendingFunctors_会变为空，mainloop可继续给其中添加cb
+    std::vector<Functor> functors;
+    callingPendingFunctors_ = true;
+
+    {
+        std::unique_lock<std::mutex> lock(mutex_);
+        functors.swap(pendingFunctors_);   // 这里的swap只是交换vector对象指向内存空间的指针而已。
+    }
+
+    for (const Functor &functor : functors)
+    {
+        functor(); // 执行当前loop需要执行的回调操作cb
+    }
+
+    callingPendingFunctors_ = false;
+}
 
 // 退出事件循环  1.loop在自己的线程中调用quit  2.在非loop的线程中，调用loop的quit
 /*
@@ -183,25 +203,4 @@ void EventLoop::removeChannel(Channel *channel)
 bool EventLoop::hasChannel(Channel *channel)
 {
     return poller_->hasChannel(channel);
-}
-
-// 执行回调操作：
-void EventLoop::doPendingFunctors() 
-{
-    // 定义局部的functors，并与pendingFunctors_进行交换
-    //，之后pendingFunctors_会变为空，mainloop可继续给其中添加cb
-    std::vector<Functor> functors;
-    callingPendingFunctors_ = true;
-
-    {
-        std::unique_lock<std::mutex> lock(mutex_);
-        functors.swap(pendingFunctors_);   // 这里的swap只是交换vector对象指向内存空间的指针而已。
-    }
-
-    for (const Functor &functor : functors)
-    {
-        functor(); // 执行当前loop需要执行的回调操作cb
-    }
-
-    callingPendingFunctors_ = false;
 }
