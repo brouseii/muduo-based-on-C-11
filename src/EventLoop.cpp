@@ -195,7 +195,7 @@ void EventLoop::doPendingFunctors()
 
     {
         std::unique_lock<std::mutex> lock(mutex_);
-        functors.swap(pendingFunctors_);
+        functors.swap(pendingFunctors_);   // 这里的swap只是交换vector对象指向内存空间的指针而已。
     }
 
     for (const Functor &functor : functors)
