@@ -117,15 +117,17 @@ void EventLoop::quit()
     }
 }
 
-// 在当前loop中执行cb
+// 该函数保证了cb这个函数对象一定是在其EventLoop线程中被调用，即在当前loop中执行cb
 void EventLoop::runInLoop(Functor cb)
 {
     if (isInLoopThread()) // 在当前的loop线程中，执行cb
     {
+	// 如果当前调用runInLoop的线程正好是EventLoop的运行线程，则直接执行此函数。
         cb();
     }
-    else // 如果在非当前线程中执行cb，则需要将cb放入队列中，并唤醒loop所在的线程来执行cb
+    else 
     {
+	// 如果在非当前线程中执行cb，则需要将cb放入队列中，并唤醒loop所在的线程来执行cb。
         queueInLoop(cb);
     }
 }
