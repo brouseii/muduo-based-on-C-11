@@ -21,6 +21,7 @@ ssize_t Buffer::readFd(int fd, int* saveErrno)
             size_t iov_len;     // Number of bytes to transfer 
         }; 
     */
+    /* 用readv从socket缓冲区读数据，首先会先填满这个vec[0]即第一块缓冲区，其次会存放在vec[1]即第二块缓冲区 */ 
     struct iovec vec[2];
     
     const size_t writable = writableBytes(); // 这是Buffer底层缓冲区剩余的可写空间大小
