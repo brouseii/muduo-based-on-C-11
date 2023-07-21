@@ -22,6 +22,7 @@ int createEventfd()
     int evtfd = ::eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
     if (evtfd < 0)
     {
+	// eventfd创建失败，一般不会失败，除非一个进程把文件描述符（Linux一个进程1024个最多）全用光了。
         LOG_FATAL("eventfd error:%d \n", errno);
     }
     return evtfd;
