@@ -1,7 +1,7 @@
 # muduo-based-on-C++11
 Rewriting muduo network library source code in the core code based on C++11.
 
-[CSDN详细的分析和说明：](https://blog.csdn.net/qq_44599368/article/details/131833423?spm=1001.2014.3001.5501)
+[CSDN万字详细的分析和说明：](https://blog.csdn.net/qq_44599368/article/details/131833423?spm=1001.2014.3001.5501)
 
 # muduo网络库编程：
 
