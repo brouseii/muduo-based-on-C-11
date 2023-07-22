@@ -80,7 +80,7 @@ void TcpConnection::send(const std::string& msg)
 // 由于应用层写的快，内核发送数据慢，故需要将待发送的数据先写入缓冲区，且设置了水位回调
 void TcpConnection::sendInLoop(const void* data, size_t len)
 {
-    loop_->assertInLoopThread();
+	loop_->assertInLoopThread();
     ssize_t nwrote = 0;
     size_t remaining = len;
     bool faultError = false;
@@ -92,7 +92,7 @@ void TcpConnection::sendInLoop(const void* data, size_t len)
         return;
     }
  
-    // if no thing in output queue, try writing directly
+	// if no thing in output queue, try writing directly
     // 此时，channel_第一次开始写数据，而且缓冲区没有待发送数据
     if (!channel_->isWriting() && outputBuffer_.readableBytes() == 0)
     {
@@ -102,13 +102,15 @@ void TcpConnection::sendInLoop(const void* data, size_t len)
             remaining = len - nwrote;
             if (remaining == 0 && writeCompleteCallback_)
             {
-                // 既然在这里数据全部发送完成，就不用再给channel设置epollout事件了
+                // 既然在这里数据全部发送完成，就不用再给channel设置epollout事件了，这样epoll_wait就不用监听可写事件并且执行handleWrite了，算是提高效率了！！！
                 loop_->queueInLoop(std::bind(writeCompleteCallback_, shared_from_this()));
             }
         }
         else // nwrote < 0
         {
+            // 未能一次性将data全部拷贝到socket发送缓冲区中
             nwrote = 0;
+            // 如果是非阻塞模式，socket发送缓冲区满了就会立即返回并且设置EWOULDBLOCK
             if (errno != EWOULDBLOCK)
             {
                 LOG_ERROR("TcpConnection::sendInLoop");
@@ -120,9 +122,8 @@ void TcpConnection::sendInLoop(const void* data, size_t len)
         }
     }
 
-    // 说明当前这一次write，并没有把数据全部发送出去，剩余的数据需要保存到缓冲区当中，然后给channel
-    // 注册epollout事件，poller发现tcp的发送缓冲区有空间，会通知相应的sock-channel，调用writeCallback_回调方法
-    // 也就是调用TcpConnection::handleWrite方法，把发送缓冲区中的数据全部发送完成
+    // 说明当前这一次write，并没有把数据全部发送出去，剩余的数据需要保存到outputBuffer_缓冲区当中，然后给channel。
+    // 给channel_注册epollout事件，poller发现tcp的发送缓冲区有空间，会通知相应的sock-channel，调用writeCallback_回调方法即TcpConnection::handleWrite()方法，把发送缓冲区中的数据全部发送完成。
     if (!faultError && remaining > 0) 
     {
         // 目前发送缓冲区剩余的待发送数据的长度
@@ -133,16 +134,16 @@ void TcpConnection::sendInLoop(const void* data, size_t len)
         {
             loop_->queueInLoop(std::bind(highWaterMarkCallback_, shared_from_this(), oldLen+remaining));
         }
-	// 将message[nwrote, nwrote+remaining]的数据，写入到outputbuffer_中
+		// 将message[nwrote, nwrote+remaining]的数据，写入到outputbuffer_中
         outputBuffer_.append((char*)data + nwrote, remaining);
 		
-	// 向poller注册channel的写事件，否则poller不会给channel通知epollout
+		// 向poller注册channel的写事件，否则poller不会给channel通知epollout
         if (!channel_->isWriting())
         {
             channel_->enableWriting();  
         }
     }
-}
+} 
 
 // 关闭连接
 void TcpConnection::shutdown()
