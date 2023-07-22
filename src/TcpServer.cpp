@@ -33,17 +33,22 @@ TcpServer::TcpServer(EventLoop *loop,
     acceptor_->setNewConnectionCallback(std::bind(&TcpServer::newConnection, this, std::placeholders::_1, std::placeholders::_2));
 }
 
+/* 彻底删除一个TcpConnection对象，必须要调用该对象的connecDestroyed()方法，执行完后才能释放该对象的堆内存。*/
 TcpServer::~TcpServer()
-{
-    for (auto &item : connections_)
+{  
+    for(auto &item : connections_)  // connections_类型为unordered_map<string, TcpConnectionPtr>，其中TcpConnectionPtr是指向TcpConnection的shared_ptr共享智能指针。
     {
-        // 这个局部的shared_ptr智能指针对象，出右括号，可以自动释放new出来的TcpConnection对象资源了
-        TcpConnectionPtr conn(item.second); 
-        item.second.reset();
-
-        // 销毁连接
-        conn->getLoop()->runInLoop(std::bind(&TcpConnection::connectDestroyed, conn));
+        // 这个局部的shared_ptr智能指针对象，出右括号则会自动释放，即引用计数减一。
+        TcpConnectionPtr conn(item.second);
+        // 在MainEventLoop的TcpServer::~TcpServer()函数中，调用item.second.reset()，释放掉TcpServer中保存的该TcpConnection对象的智能指针。
+        item.second.reset(); 
+        
+        /* 此时，只有“conn”持有TcpConnection对象，即引用计数为1 */
+        // 让这个TcpConnection对象conn所属的SubEventLoop线程，执行TcpConnection::connectDestroyed()函数。
+        conn->getLoop()->runInLoop(bind(&TcpConnection::connectDestroyed, conn));
+        /* 此时，“conn”和“subEventLoop中的TcpConnection::connectDestroyed()成员函数的this指针”共同持有TcpConnection对象，即引用计数为2 */
     }
+    /* 此时，只“subEventLoop中的TcpConnection::connectDestroyed()成员函数的this指针”持有TcpConnection对象，即引用计数为1。在该函数执行结束后，引用计数减为0，即会自动释放TcpConnection对象。*/
 }
 
 // 设置底层subloop的个数
