@@ -100,13 +100,10 @@ int main()
     loop.loop();
     return 0;
 }
-```
-
-![image-20230522201520585](others/image-20230522201520585.png)
-
-
-
-
+``` 
+<p align="center">
+  <img src="./pictures/image-20230522201520585.png" alt="image_description">
+</p>
 
 ## 准备工作：
 
@@ -136,7 +133,10 @@ su root
 
 centos boost fatal error: pyconfig.h: No such file or directory #include pyconfig.h。
 
-![image-20230522161548570](others/image-20230522161548570.png)
+
+<p align="center">
+  <img src="./pictures/image-20230522161548570.png" alt="image_description">
+</p>
 
 ##### 原因：
 
@@ -282,7 +282,10 @@ int main()
 }
 ```
 
-![image-20230523000840579](others/image-20230523000840579.png)
+
+<p align="center">
+  <img src="./pictures/image-20230523000840579.png" alt="image_description">
+</p>
 
 ## 基于muduo库的客户端程序：
 
