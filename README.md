@@ -349,4 +349,6 @@ make
 ./testserver  # 即可使用客户端连接到本机IP（127.0.0.1）的8000端口，来请求该回显服务器
 ```
 
-![image-20230718203859114](others/image-20230718203859114.png)
+<p align="center">
+  <img src="./pictures/image-20230718203859114.png" alt="image_description">
+</p>
