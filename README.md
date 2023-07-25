@@ -102,7 +102,7 @@ int main()
 }
 ``` 
 <p align="center">
-  <img src="./pictures/image-20230522201520585.png" alt="image_description">
+  <img src="./others/image-20230522201520585.png" alt="image_description">
 </p>
 
 ## 准备工作：
@@ -135,7 +135,7 @@ centos boost fatal error: pyconfig.h: No such file or directory #include pyconfi
 
 
 <p align="center">
-  <img src="./pictures/image-20230522161548570.png" alt="image_description">
+  <img src="./others/image-20230522161548570.png" alt="image_description">
 </p>
 
 ##### 原因：
@@ -284,7 +284,7 @@ int main()
 
 
 <p align="center">
-  <img src="./pictures/image-20230523000840579.png" alt="image_description">
+  <img src="./others/image-20230523000840579.png" alt="image_description">
 </p>
 
 ## 基于muduo库的客户端程序：
@@ -350,5 +350,5 @@ make
 ```
 
 <p align="center">
-  <img src="./pictures/image-20230718203859114.png" alt="image_description">
+  <img src="./others/image-20230718203859114.png" alt="image_description">
 </p>
