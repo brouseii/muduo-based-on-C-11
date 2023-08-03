@@ -34,11 +34,11 @@ public:
     // 防止当channel被手动remove掉，channel还在执行回调操作
     void tie(const std::shared_ptr<void>&);
 
-	// 返回该Channel监听的文件描述符
+    // 返回该Channel监听的文件描述符
     int fd() const { return fd_; }
-	// 返回该Channel监听的文件描述符所感兴趣的事件
+    // 返回该Channel监听的文件描述符所感兴趣的事件
     int events() const { return events_; }
-	// 设置pollers返回的发生的事件
+    // 设置pollers返回的发生的事件
     int set_revents(int revt) { revents_ = revt; }
 
     // 设置fd相应的事件状态
@@ -58,7 +58,7 @@ public:
 
     // one loop per thread
     EventLoop* ownerLoop() { return loop_; }
-	// 在channel所属的EventLoop对象loop_中，删除掉当前的channel
+    // 在channel所属的EventLoop对象loop_中，删除掉当前的channel
     void remove();
 private:
     /* 
